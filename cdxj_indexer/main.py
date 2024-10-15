@@ -363,6 +363,35 @@ class CDX09Indexer(CDXLegacyIndexer):
 
 
 # ============================================================================
+class CDXWgetIndexer(CDXLegacyIndexer):
+    CDX_HEADER = " CDX a b a m s k r M V g u"
+
+    CDX_FIELDS = [
+        "url",
+        "timestamp",
+        "url",
+        "mime",
+        "status",
+        "digest",
+        "redirect",
+        "meta",
+        "offset",
+        "filename",
+        "warc-record-id",
+    ]
+
+    DEFAULT_FIELDS = [
+        "warc-target-uri",
+        "mime",
+        "http:status",
+        "warc-payload-digest",
+        "offset",
+        "filename",
+        "warc-record-id",
+    ]
+
+
+# ============================================================================
 class SortingWriter:
     MAX_SORT_BUFF_SIZE = 1024 * 1024 * 32
 
@@ -494,6 +523,8 @@ def main(args=None):
 
     group.add_argument("-11", "--cdx11", action="store_true")
 
+    group.add_argument("-wget", "--cdx-wget", action="store_true")
+
     group.add_argument("-f", "--fields")
     group.add_argument("-rf", "--replace-fields")
 
@@ -523,6 +554,8 @@ def write_cdx_index(output, inputs, opts):
         cls = CDX11Indexer
     elif opts.get("cdx09"):
         cls = CDX09Indexer
+    elif opts.get("cdx_wget"):
+        cls = CDXWgetIndexer
     else:
         cls = CDXJIndexer
 

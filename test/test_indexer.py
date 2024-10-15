@@ -103,6 +103,15 @@ com,example)/ 20170306040348 http://example.com/ warc/revisit 200 G7HRM7BGOKSKMS
 """
         assert res == exp
 
+    def test_warc_cdx_wget(self):
+        res = self.index_file("example.warc.gz", cdx_wget=True)
+        exp = """\
+ CDX a b a m s k r M V g u
+http://example.com/ 20170306040206 http://example.com/ text/html 200 G7HRM7BGOKSKMSXZAHMUQTTV53QOFSMK - - 784 example.warc.gz <urn:uuid:a9c51e3e-0221-11e7-bf66-0242ac120005>
+http://example.com/ 20170306040348 http://example.com/ warc/revisit 200 G7HRM7BGOKSKMSXZAHMUQTTV53QOFSMK - - 2635 example.warc.gz <urn:uuid:e6e395ca-0221-11e7-a18d-0242ac120005>
+"""
+        assert res == exp
+
     def test_warc_cdx_11_avoid_dupe_line(self):
         res = self.index_file("", cdx11=True, sort=True)
         lines = res.split("\n")
