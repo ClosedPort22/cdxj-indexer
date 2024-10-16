@@ -112,6 +112,14 @@ http://example.com/ 20170306040348 http://example.com/ warc/revisit 200 G7HRM7BG
 """
         assert res == exp
 
+    def test_warc_cdx_wget_base32(self):
+        res = self.index_file("example-hex-digest.warc", cdx_wget=True)
+        exp = """\
+ CDX a b a m s k r M V g u
+http://httpbin.org/post 20140610000859 http://httpbin.org/post application/json 200 M532K5WS4GY2H4OVZO6HRPOP47A7KDWU - - 0 example-hex-digest.warc <urn:uuid:f6271bbf-d071-434a-8075-aa3a294d8004>
+"""
+        assert res == exp
+
     def test_warc_cdx_11_avoid_dupe_line(self):
         res = self.index_file("", cdx11=True, sort=True)
         lines = res.split("\n")

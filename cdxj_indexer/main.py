@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+import base64
+import binascii
 import json
 import surt
 import logging
@@ -390,6 +392,15 @@ class CDXWgetIndexer(CDXLegacyIndexer):
         "warc-record-id",
     ]
 
+    _is_digest_hex = re.compile(r"^sha1:[0-9a-fA-F]{40}$").match
+
+    def _get_digest(self, record, name):
+        digest = super()._get_digest(record, name)
+        if not self._is_digest_hex(digest):
+            return digest
+        # convert hex string to upper case base32
+        return "sha1:" + base64.b32encode(
+            binascii.unhexlify(digest.split(":")[-1])).decode("utf-8")
 
 # ============================================================================
 class SortingWriter:
